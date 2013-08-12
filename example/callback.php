@@ -4,10 +4,10 @@ require_once '../vendor/autoload.php';
 
 $clientConfig = new \fkooman\OAuth\Client\ClientConfig(
     array(
-        "authorize_endpoint" => "http://localhost/OAuth2-for-Yii/index.php/oauth2/authorize",
+        "authorize_endpoint" => "http://localhost/OAuth2-Server/index.php/oauth2/authorize",
         "client_id" => "testclient",
         "client_secret" => "testpass",
-        "token_endpoint" => "http://localhost/OAuth2-for-Yii/index.php/oauth2/token",
+        "token_endpoint" => "http://localhost/OAuth2-Server/index.php/oauth2/token",
     )
 );
 
@@ -18,7 +18,7 @@ try {
     $cb->handleCallback($_GET);
 
     header("HTTP/1.1 302 Found");
-    header("Location: http://localhost/client/example/index.php");
+    header("Location: http://localhost/OAuth2-Client/example/index.php");
     exit;
 } catch (\fkooman\OAuth\Client\AuthorizeException $e) {
     // this exception is thrown by Callback when the OAuth server returns a

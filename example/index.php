@@ -1,15 +1,15 @@
 <?php
 
-require_once '../vendor/autoload.php';
+require_once 'vendor/autoload.php';
 
-$apiUri = "http://localhost/oauth/php-oauth/api.php/authorizations/";
+$apiUri = "http://localhost/OAuth2-Server/index.php/resource/resource";
 
 $clientConfig = new \fkooman\OAuth\Client\ClientConfig(
     array(
-        "authorize_endpoint" => "http://localhost/OAuth2-for-Yii/index.php/oauth2/authorize",
+        "authorize_endpoint" => "http://localhost/OAuth2-Server/index.php/oauth2/authorize",
         "client_id" => "testclient",
         "client_secret" => "testpass",
-        "token_endpoint" => "http://localhost/OAuth2-for-Yii/index.php/oauth2/token",
+        "token_endpoint" => "http://localhost/OAuth2-Server/index.php/oauth2/token",
     )
 );
 
@@ -28,15 +28,14 @@ if (false === $accessToken) {
 }
 
 try {
-	print_r($accessToken);
-	exit();
-    die('<font color=red size = 18>access token get</font>');
     $client = new \Guzzle\Http\Client();
     $bearerAuth = new \fkooman\Guzzle\Plugin\BearerAuth\BearerAuth($accessToken->getAccessToken());
     $client->addSubscriber($bearerAuth);
     $response = $client->get($apiUri)->send();
-    header("Content-Type: application/json");
-    echo $response->getBody();
+    //header("Content-Type: application/json");
+   $value = html_entity_decode($response->getBody());
+   $val = json_decode($value);
+   print_r($val->user_id);
 } catch (\fkooman\Guzzle\Plugin\BearerAuth\Exception\BearerErrorResponseException $e) {
     if ("invalid_token" === $e->getBearerReason()) {
         // the token we used was invalid, possibly revoked, we throw it away
